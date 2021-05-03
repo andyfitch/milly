@@ -1,0 +1,8 @@
+@font-face {
+  font-family: 'GibsonTwo';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('../../fonts/gibson-regular-webfont.woff2') format('woff2'),
+      url('../../fonts/gibson-regular-webfont.woff') format('woff');
+}
