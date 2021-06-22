@@ -1,0 +1,12 @@
+@import 'tailwindcss/base';
+
+html {
+  font-size: 62.5%;
+  height: 100%;
+}
+
+body {
+  min-height: 100%;
+  font-family: 'avenir-book';
+  color: theme('colors.orange');
+}

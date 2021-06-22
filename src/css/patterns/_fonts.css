@@ -1,8 +1,17 @@
 @font-face {
-  font-family: 'GibsonTwo';
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url('../../fonts/gibson-regular-webfont.woff2') format('woff2'),
-      url('../../fonts/gibson-regular-webfont.woff') format('woff');
+  font-family: 'avenir-book';
+  src: url('../../fonts/avenir-book.woff2') format('woff2'),
+       url('../../fonts/avenir-book.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'avenir-black';
+  src: url('../../fonts/avenir-black.woff2') format('woff2'),
+       url('../../fonts/avenir-black.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'avenir-bold';
+  src: url('../../fonts/avenir-heavy.woff2') format('woff2'),
+       url('../../fonts/avenir-heavy.woff') format('woff');
 }

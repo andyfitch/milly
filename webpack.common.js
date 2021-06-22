@@ -6,70 +6,17 @@ const { WebpackManifestPlugin } = require('webpack-manifest-plugin')
 
 var config = {
   entry: './src/js/main.js',
-  module: {
-    rules: [
-      {
-        test: /\.m?jsx?$/,
-        exclude: /node_modules/,
-        use: ['babel-loader']
-      },
-      {
-        test: /\.css$/,
-        exclude: /node_modules/,
-        use: [
-          MiniCssExtractPlugin.loader,
-          {
-            loader: 'css-loader',
-            options: {
-              importLoaders: 1,
-            }
-          },
-          {
-            loader: 'postcss-loader',
-            options: {
-              postcssOptions: {
-                ident: 'postcss',
-                plugins: [
-                  'postcss-preset-env',
-                  require('tailwindcss')('./tailwind.config.js'),
-                  require('autoprefixer')
-                ],
-              },
-            },
-          },
-        ],
-      },
-      {
-        test: /\.(eot|svg|ttf|woff|woff2)$/,
-        exclude: /node_modules/,
-        use: ['file-loader?name=/fonts/[name].[ext]']
-      },
-      {
-        test: /\.(png|jpe?g)$/,
-        exclude: /node_modules/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              outputPath: 'img'
-            }
-          },
-          {
-            loader: 'tinify-loader',
-            options: {
-              apikey: 'Az7H_NvSjTuDEQ2x8QE9oFU2j7Kno3UT'
-            }
-          }
-        ]
-      }
-    ]
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    publicPath: '/',
+    filename: 'js/[name].[contenthash].js'
   },
   plugins: [
     // Removes/cleans build folders and unused assets when rebuilding
     new CleanWebpackPlugin(),
 
     new MiniCssExtractPlugin({
-      filename: 'css/[name]' + (process.env.NODE_ENV === 'production' || 1==1 ? '.[contenthash]' : '') + '.css',
+      filename: 'css/[name].[contenthash].css',
       chunkFilename: 'chunk-[id].css',
     }),
 
@@ -77,10 +24,18 @@ var config = {
     new CopyWebpackPlugin({
       patterns: [
         {
+          from: 'src/img',
+          to: 'img',
+          globOptions: {
+            ignore: ['**/*/.DS_Store'],
+          },
+          noErrorOnMissing: true,
+        },
+        {
           from: 'src/fonts',
           to: 'fonts',
           globOptions: {
-            ignore: ['*.DS_Store'],
+            ignore: ['**/*/.DS_Store'],
           },
           noErrorOnMissing: true,
         },
@@ -88,7 +43,7 @@ var config = {
           from: 'src/favicons',
           to: 'favicons',
           globOptions: {
-            ignore: ['*.DS_Store'],
+            ignore: ['**/*/.DS_Store'],
           },
           noErrorOnMissing: true,
         },
@@ -96,7 +51,7 @@ var config = {
           from: 'src/other',
           to: 'other',
           globOptions: {
-            ignore: ['*.DS_Store'],
+            ignore: ['**/*/.DS_Store'],
           },
           noErrorOnMissing: true,
         }
@@ -107,9 +62,71 @@ var config = {
       fileName: 'manifest.json'
     }),
   ],
-  output: {
-    path: path.resolve(__dirname, 'dist'),
-    publicPath: '/'
+  module: {
+    rules: [
+      {
+        test: /\.m?jsx?$/,
+        exclude: /node_modules/,
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              cacheDirectory: './webpack_cache/'
+            }
+          }
+        ]
+      },
+      {
+        test: /\.css$/,
+        exclude: /node_modules/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader',
+            options: {
+              importLoaders: 1,
+              url: false
+            }
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              postcssOptions: {
+                ident: 'postcss',
+                plugins: [
+                  require('postcss-import'),
+                  require('postcss-url')({
+                    url: 'rebase',
+                    from: 'src/css/main.css',
+                    to: 'dist/css/main.[contenthash].css'
+                  }),
+                  require('tailwindcss'),
+                  require('postcss-nested'),
+                  require('postcss-preset-env')({
+                    stage: 0,
+                    features: {
+                      'focus-within-pseudo-class': false,
+                    },
+                  }),
+                ],
+              },
+            },
+          }
+        ],
+      },
+      {
+        test: /\.(jpe?g|png|gif|svg)$/i,
+        type: 'asset',
+      },
+    ]
+  },
+  stats: {
+    children: true
+  },
+  resolve: {
+    alias: {
+      Hybrid: path.resolve(__dirname, 'node_modules/@parallaxagency/hybrid/dist/js/')
+    }
   }
 }
 

@@ -6,9 +6,6 @@ const args = require('yargs').argv
 let config = merge(common, {
   mode: 'development',
   devtool: 'eval-source-map',
-  output: {
-    filename: 'js/[name].js'
-  }
 })
 
 if (typeof args.analyse !== 'undefined') {

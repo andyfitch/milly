@@ -3,7 +3,13 @@
   "version": "1.0.0",
   "scripts": {
     "build:dev": "webpack --config webpack.dev.js",
-    "build": "webpack --config webpack.prod.js"
+    "build:prod": "webpack --config webpack.prod.js",
+    "build": "npm run build:prod",
+    "serve": "php -S localhost:3000 & browser-sync start --proxy 'localhost:3000' --files './index.php, ./dist/css/*.css, ./dist/js/*.js'",
+    "watch:css": "watch --interval=0.025 'npm run build:dev' ./src/css",
+    "watch:js": "watch --interval=0.025 'npm run build:dev' ./src/js",
+    "watch": "npm run watch:css & npm run watch:js",
+    "start": "npm run build:dev && parallelshell 'npm run serve' 'npm run watch'"
   },
   "private": true,
   "babel": {
@@ -45,23 +51,30 @@
     "css-minimizer-webpack-plugin": "^2.0.0",
     "cssnano": "^5.0.2",
     "file-loader": "^6.2.0",
+    "image-minimizer-webpack-plugin": "^2.2.0",
+    "imagemin-gifsicle": "^7.0.0",
+    "imagemin-mozjpeg": "^9.0.0",
+    "imagemin-pngquant": "^9.0.2",
+    "imagemin-svgo": "^9.0.0",
     "lodash": "^4.17.21",
     "mini-css-extract-plugin": "^1.6.0",
     "name-all-modules-plugin": "^1.0.1",
+    "parallelshell": "3.0.1",
     "postcss": "^8.2.8",
     "postcss-cli": "^8.3.1",
+    "postcss-import": "^14.0.2",
     "postcss-loader": "^4.2.0",
     "postcss-preset-env": "^6.7.0",
+    "postcss-url": "^10.1.3",
     "style-loader": "^2.0.0",
     "tailwindcss": "^2.1.2",
     "terser-webpack-plugin": "^5.1.1",
-    "tinify-loader": "^1.0.0",
-    "webpack": "^5.36.2",
+    "watch": "^1.0.2",
+    "webpack": "^5.40.0",
     "webpack-bundle-analyzer": "^4.4.1",
     "webpack-cli": "^4.6.0",
     "webpack-manifest-plugin": "^3.1.1",
     "webpack-merge": "^5.7.3",
-    "webpack-tinypng-loader": "^1.0.1",
     "yargs": "^16.2.0"
   }
 }
